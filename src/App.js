@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import TerminalStatistics from './TerminalStatistics';
+import TerminalStatistics from './TerminalStatistics.jsx';
 
 function App() {
   return (
