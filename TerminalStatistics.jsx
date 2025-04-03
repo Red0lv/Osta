@@ -4,7 +4,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsive
 const TerminalStatistics = () => {
   const [activeTab, setActiveTab] = useState('summary');
   
-  // Statistikas dati no analīzes
+  // Reālie dati, kas iegūti no Excel failiem, ar izņemtiem nepareizajiem kravu veidiem
   const data = {
     totalVehicles: 14952,
     clientStats: [
@@ -21,16 +21,13 @@ const TerminalStatistics = () => {
       { name: 'Laskana', count: 23 },
       { name: 'WT malka', count: 50 }
     ],
+    // Tikai korekti kravu veidi
     cargoStats: [
       { name: 'Papīrmalka', count: 8261 },
       { name: 'Kokskaidu granulas', count: 2297 },
       { name: 'Celulozes šķelda', count: 2120 },
       { name: 'Kurināmā šķelda', count: 1309 },
-      { name: 'Tehnoloģiskā šķelda', count: 730 },
-      { name: 'Zāģmateriāli', count: 134 },
-      { name: 'Pupas', count: 58 },
-      { name: 'Mieti', count: 37 },
-      { name: 'Citas kravas', count: 6 }
+      { name: 'Tehnoloģiskā šķelda', count: 730 }
     ],
     monthlyStats: [
       { name: 'Janvāris', count: 1225 },
@@ -55,7 +52,7 @@ const TerminalStatistics = () => {
   };
   
   // Krāsu palete diagrammām
-  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d', '#ffc658', '#8dd1e1'];
+  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8'];
   
   // Kopsavilkuma sadaļa
   const renderSummary = () => (
@@ -123,7 +120,7 @@ const TerminalStatistics = () => {
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
-                  data={data.cargoStats.slice(0, 5)}
+                  data={data.cargoStats}
                   cx="50%"
                   cy="50%"
                   labelLine={false}
@@ -132,7 +129,7 @@ const TerminalStatistics = () => {
                   fill="#8884d8"
                   dataKey="count"
                 >
-                  {data.cargoStats.slice(0, 5).map((entry, index) => (
+                  {data.cargoStats.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
@@ -164,7 +161,7 @@ const TerminalStatistics = () => {
         <ul className="list-disc pl-5 space-y-1">
           <li>Visvairāk transportlīdzekļu apkalpoti maijā ({data.monthlyStats[4].count}) un jūnijā ({data.monthlyStats[5].count}).</li>
           <li>TOP 3 klienti kopā veido {((data.clientStats.slice(0, 3).reduce((sum, client) => sum + client.count, 0) / data.totalVehicles) * 100).toFixed(1)}% no kopējā apjoma.</li>
-          <li>Galvenie kravu veidi ir saistīti ar koksnes produktiem, kopā veidojot vairāk nekā 95% no visām kravām.</li>
+          <li>Galvenie kravu veidi ir saistīti ar koksnes produktiem, kas veido 100% no reģistrētajām kravām.</li>
           <li>Otrais ceturksnis ir visaktīvākais periods, veidojot {((data.quarterlyData[1].count / data.totalVehicles) * 100).toFixed(1)}% no kopējā gada apjoma.</li>
         </ul>
       </div>
@@ -379,18 +376,13 @@ const TerminalStatistics = () => {
         <h3 className="text-md font-semibold mb-3">Kravu veidu analīze</h3>
         <p className="mb-2">
           <span className="font-medium">Dominējošie kravu veidi: </span>
-          Papīrmalka (55.3%), Kokskaidu granulas (15.4%) un Celulozes šķelda (14.2%) 
-          sastāda vairāk nekā 80% no visām kravām.
-        </p>
-        <p className="mb-2">
-          <span className="font-medium">Koksnes produkti: </span>
-          Lielākā daļa no visām kravām ir saistīta ar koksnes produktiem - papīrmalka, 
-          šķelda un granulas kopā veido aptuveni 97% no visām kravām.
+          Papīrmalka (56.3%), Kokskaidu granulas (15.7%) un Celulozes šķelda (14.5%) 
+          sastāda vairāk nekā 85% no visām kravām.
         </p>
         <p>
-          <span className="font-medium">Citi produkti: </span>
-          Termināls apstrādā arī nelielu daudzumu citu produktu, kas kopā veido mazāk nekā 3% 
-          no kopējā apjoma.
+          <span className="font-medium">Koksnes produkti: </span>
+          Visas kravas ir saistītas ar koksnes produktiem - papīrmalka, 
+          šķelda un granulas veido 100% no apstrādātajiem kravu veidiem.
         </p>
       </div>
     </div>
